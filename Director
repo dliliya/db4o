@@ -1,0 +1,46 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package javaapplication2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Liliya
+ */
+public class Director extends Person{
+    private List films;
+    private Boolean formatDigital; //цифровое качество съемки
+    
+    public Director(String name, String sex, String country, int age,int countOfChildren, List films_, Boolean formatDigital_) {
+        super(name, sex, country, age, countOfChildren);
+        films = films_;
+        formatDigital = formatDigital_;
+    }
+    public Director(String name, String sex, String country, int age,int countOfChildren,Boolean formatDigital_) {
+        this(name, sex, country, age, countOfChildren,new ArrayList(),formatDigital_);
+    }
+
+    public Boolean getFormatDigital() {
+        return formatDigital;
+    }
+
+    public void setFormatDigital(Boolean formatDigital) {
+        this.formatDigital = formatDigital;
+    }
+    
+      
+    public List getfilms() {
+        return films;
+    }
+
+    public void setFilms(List films) {
+        this.films = films;
+    }
+    
+    
+}
