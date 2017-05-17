@@ -13,14 +13,14 @@ import java.util.List;
  * @author Liliya
  */
 public class Film {
-    private String name, director;
+    private String name;
     private String country;
     private int year;
     private List Actors;
+    private Director director;
     
     
-    
-    public Film(String name, String director, String country, int year, List Actors) {
+    public Film(String name, Director director, String country, int year, List Actors) {
         this.name = name;
         this.director = director;
         this.country = country;
@@ -29,7 +29,7 @@ public class Film {
     }
     public Film(){}
     
-    public Film(String name, String director, String country, int year) {
+    public Film(String name, Director director, String country, int year) {
         this(name, director, country, year, new ArrayList());
     }
 
@@ -41,11 +41,11 @@ public class Film {
         this.Actors = Actors;
     }
     
-    public String getDirector() {
+    public Director getDirector() {
         return director;
     }
 
-    public void setDirector(String director) {
+    public void setDirector(String Director) {
         this.director = director;
     }
 
