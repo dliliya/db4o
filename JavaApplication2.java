@@ -19,9 +19,9 @@ public class JavaApplication2 {
         .newConfiguration(), "D:\\mydb");
         try {
             fill_base(db);            
-            printActorDirectorPerson(db);  //Функция, которая выводит в консоль список людей, которые одновременно и актеры и режиссеры*/
-            ListActerNotDigital(db); //Функция, которая выводит в консоль список актеров, которые снимались в фильмах цифрового формата */ 
-            ListFilmActorOskar(db);   //Функция, которая выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар   
+            printActorDirectorPerson(db);  // Функция, которая выводит в консоль список людей, которые одновременно и актеры и режиссеры*/
+            ListActerNotDigital(db);       // Функция, которая выводит в консоль список актеров, которые снимались в фильмах цифрового формата */ 
+            ListFilmActorOskar(db);        // Функция, которая выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар   
             clearDatabase(db);           
         } finally {
             db.close();
@@ -30,9 +30,9 @@ public class JavaApplication2 {
     
     
     
+    // Функция выводит в консоль список людей, которые одновременно и актеры и режиссеры
     public static void printActorDirectorPerson(ObjectContainer db){
-        ///Функция, которая выводит в консоль список людей, которые одновременно и актеры и режиссеры
-        //запрос на актеров и режиссеров
+        // Сделаем запрос актеров и режиссеров и поместим их в список
         Query queryActor = db.query();
         queryActor.constrain(Actor.class);
         
@@ -42,18 +42,17 @@ public class JavaApplication2 {
         List<Actor> resultActor = queryActor.execute();
         List<Director> resultDirector = queryDirector.execute();
         
-        List<Person> people = new ArrayList(); 
-        //двойной цикл для каждого актера проверяю всех режиссеров
+        
+        List<Person> people = new ArrayList(); // Список для людей являющихся одновременно режиссером и актером
+        
+        // Вложенным циклом сравниваем суперклассы каждого актера и режиссера  
         resultActor.forEach((actor) -> 
         {
-            //метод в классе Person, возращающий Person для подклассов
-            //Person для актера
             Person actorPerson = actor.getPerson();
             resultDirector.forEach((director) -> 
             {
-                //Person для режиссера
                 Person directorPerson = director.getPerson();
-                //сравниваю person, если равны - печать
+                // Если суперклассы равны, то добавляем человека в целевой список и выводим в консоль
                 if (actorPerson.equals(directorPerson)) 
                 {
                     people.add(actorPerson);
@@ -63,12 +62,12 @@ public class JavaApplication2 {
         });
        
     }
-    
+   
+    // Функция выводит в консоль список актеров, которые снимались в фильмах цифрового формата 
+    // Сначала шагом идет выборка всех режиссеров, которые снимают в цифровом формате, далее в их фильмах выбираются различные актеров
     public static void ListActerNotDigital(ObjectContainer db)
     {
-        //Функция, которая выводит в консоль список актеров, которые снимались в фильмах цифрового формата
-        //выбираю всех режиссеров, которые снимают в цифровом формате, в их фильмах выбираю различных актеров
-        //запрос режиссеров, снимающих в цифровом формате. Поле formatDigital = true
+        // Запрос режиссеров, снимающих в цифровом формате: formatDigital == true
         Query queryDirector = db.query();
         queryDirector.constrain(Director.class);
         Query formatDigitalQuery = queryDirector.descend("formatDigital");
@@ -79,16 +78,19 @@ public class JavaApplication2 {
         
         resultDirector.forEach((director) -> 
         {
-            //получаем список фильмов режиссера
+            // Запрашиваем список фильмов режиссера...
             List<Film> films = director.getfilms();
+            // ... и проходимся по ним в цикле
             films.forEach((film)->
             {
-                //получаем список актеров в фильме
+                // Получаем список актеров в фильме
                 List<Actor> listActors= film.getActors();
-                //Мар - в качестве ключа храню toString(), значение - актер
+                // Для хранения актеров используется контейнер Мар (что позволяет избежать дублей) 
+                // где в качестве ключа используется возвращаемое значение функции класса toString(),
+                // а значение - объект актера
                 listActors.forEach((actor)->
                 {
-                    //если такого значения нет, добавляю в Мар (исключение дублей)
+                    // Если актер отсутствует - он добавляется в контейнер
                     if (hashMap.get(actor.toString())==null)
                         hashMap.put(actor.toString(), actor);
                 });
@@ -98,7 +100,7 @@ public class JavaApplication2 {
         
         Set<Map.Entry<String, Actor>> set = hashMap.entrySet();
 
-        // Отобразим набор
+        // Выведем в консоль получившийся набор
         for (Map.Entry<String, Actor> me : set) 
         {
             System.out.println(me.getValue());
@@ -106,20 +108,23 @@ public class JavaApplication2 {
         
      }
     
+    // Функция выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар
     public static void ListFilmActorOskar(ObjectContainer db)
     {
-        //Функция, которая выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар
-        //Мар - в качестве ключа храню film.toString(), значение - фильм
+        // Для хранения целевого списка фильмов используется контейнер Мар (что позволяет избежать дублей) 
+        // где в качестве ключа используется возвращаемое значение функции класса toString(),
+        // а значение - объект фильма
         Map<String, Film> hashMap = new HashMap<>();
         List<Actor> results = db.query(new Predicate<Actor>() {
             public boolean match(Actor actor) {                
-                //выбираю актеров, имеющий оскар
+                // Выборка актеров имеющих оскар
                 if (actor.isHas_oskar())
                 {
-                    //получаю его фильмы
+                    // Выборка фальмов в которых актер снимался
                     List<Film> films = actor.getFilms();
                     for (Film film : films) {
-                        //сравниваю год получения оскара и год создания фильма, добавляю в мар
+                        // Сравниваем год получения оскара и год создания фильма
+                        // Если год получения оскара актером меньше чем год выпуска фильма - фильм добавляется в контейнер
                         if (film.getYear()>actor.getYear_oskar()) {
                             if (hashMap.get(film.toString())==null)
                                 hashMap.put(film.toString(), film);
@@ -134,7 +139,7 @@ public class JavaApplication2 {
         
         Set<Map.Entry<String, Film>> set = hashMap.entrySet();
 
-        // Отобразим набор
+        // Выведем в консоль получившийся набор
         for (Map.Entry<String, Film> me : set) 
         {
             System.out.println(me.getValue());
@@ -164,7 +169,6 @@ public class JavaApplication2 {
             
             Director director5=new Director("Martin Scorsese","M", "UK",74,2,false);
             db.store(director5);
-            
             
             //films
             Film film1=new Film("The Avengers",director4, "USA",2012);
@@ -200,11 +204,9 @@ public class JavaApplication2 {
             director5.setFilms(filmsD4);
             db.store(director5);
             
-            //\\
             ArrayList<Film> films1 = new ArrayList<>();
             films1.add(film1);
             films1.add(film2);
-            
             
             ArrayList<Film> films2 = new ArrayList<>();
             films2.add(film3);
@@ -229,35 +231,34 @@ public class JavaApplication2 {
             db.store(actor4);
             
             ArrayList<Actor> actors1 = new ArrayList<>(); 
-            actors1.add(actor1); //дауни
+            actors1.add(actor1);
             film1.setActors(actors1);
-            db.store(film1);//мстители
+            db.store(film1);
             
             ArrayList<Actor> actors2 = new ArrayList<>();
-            actors2.add(actor1);// дауни
-            actors2.add(actor4); // лео
+            actors2.add(actor1);
+            actors2.add(actor4);
             film2.setActors(actors2);
-            db.store(film2);  //шерлок
+            db.store(film2); 
             
             ArrayList<Actor> actors3= new ArrayList<>();
-            actors3.add(actor2); //питт
-            actors3.add(actor3); // стэтхэм
-            actors3.add(actor1); // 
-            actors3.add(actor4); // лео
+            actors3.add(actor2); 
+            actors3.add(actor3);
+            actors3.add(actor1);
+            actors3.add(actor4); 
             film3.setActors(actors3);
-            db.store(film3);//большой куш
+            db.store(film3);
             
             ArrayList<Actor> actors4= new ArrayList<>();
-            actors4.add(actor3); // стэтхэм
+            actors4.add(actor3); 
             film4.setActors(actors4);
-            db.store(film4);//карты деньги
+            db.store(film4);
             
             ArrayList<Actor> actors5= new ArrayList<>();
-            actors5.add(actor4); // лео
-            actors5.add(actor2); //питт
+            actors5.add(actor4); 
+            actors5.add(actor2);
             film5.setActors(actors5);
-            db.store(film5);//остров проклятых
-            
+            db.store(film5);            
     }
 
     public static void clearDatabase(ObjectContainer db) {
