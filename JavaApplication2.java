@@ -31,7 +31,7 @@ public class JavaApplication2 {
     
     
     public static void printActorDirectorPerson(ObjectContainer db){
-        //список людей, которые одновременно и актеры и режиссеры
+        ///Функция, которая выводит в консоль список людей, которые одновременно и актеры и режиссеры
         //запрос на актеров и режиссеров
         Query queryActor = db.query();
         queryActor.constrain(Actor.class);
@@ -66,8 +66,9 @@ public class JavaApplication2 {
     
     public static void ListActerNotDigital(ObjectContainer db)
     {
+        //Функция, которая выводит в консоль список актеров, которые снимались в фильмах цифрового формата
         //выбираю всех режиссеров, которые снимают в цифровом формате, в их фильмах выбираю различных актеров
-        //запрос режиссеров, снимающих в цифровом формате
+        //запрос режиссеров, снимающих в цифровом формате. Поле formatDigital = true
         Query queryDirector = db.query();
         queryDirector.constrain(Director.class);
         Query formatDigitalQuery = queryDirector.descend("formatDigital");
