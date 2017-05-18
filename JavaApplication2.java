@@ -18,11 +18,11 @@ public class JavaApplication2 {
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded
         .newConfiguration(), "D:\\mydb");
         try {
-            fill_base(db);            //*/
-            printActorDirectorPerson(db);  //список людей, которые одновременно и актеры и режиссеры*/
-            ListActerNotDigital(db); //список актеров, которые снимались в цифровом формате */ 
-            ListFilmActorOskar(db);   //список фильмов, в которых снимался актер, имеющий на тот момент оскар   
-            clearDatabase(db);  */          
+            fill_base(db);            
+            printActorDirectorPerson(db);  //Функция, которая выводит в консоль список людей, которые одновременно и актеры и режиссеры*/
+            ListActerNotDigital(db); //Функция, которая выводит в консоль список актеров, которые снимались в фильмах цифрового формата */ 
+            ListFilmActorOskar(db);   //Функция, которая выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар   
+            clearDatabase(db);           
         } finally {
             db.close();
         }
