@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Director extends Person{
     private List films;
-    private Boolean formatDigital; //цифровое качество съемки
+    private Boolean formatDigital; // Значение указывающее, что режиссер снимает фильмы в цифровом формате
     
     public Director(String name, String sex, String country, int age,int countOfChildren, List films_, Boolean formatDigital_) {
         super(name, sex, country, age, countOfChildren);
