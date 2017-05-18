@@ -108,7 +108,7 @@ public class JavaApplication2 {
     
     public static void ListFilmActorOskar(ObjectContainer db)
     {
-        //список фильмов, в которых снимался актер, имеющий на тот момент оскар
+        //Функция, которая выводит в консоль список фильмов, в которых снимался актер, имеющий на тот момент оскар
         //Мар - в качестве ключа храню film.toString(), значение - фильм
         Map<String, Film> hashMap = new HashMap<>();
         List<Actor> results = db.query(new Predicate<Actor>() {
