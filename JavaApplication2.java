@@ -63,6 +63,11 @@ public class JavaApplication2 {
                 hashMap.put(directorPerson.toString(), directorPerson);
         });
         
+        // Выведем в консоль получившийся набор
+        for (Map.Entry<String, Person> me : set) 
+        {
+            System.out.println(me.getValue());
+        }
        // List<Person> people = new ArrayList(); // Список для людей являющихся одновременно режиссером и актером
         
         // Вложенным циклом сравниваем суперклассы каждого актера и режиссера  
