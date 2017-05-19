@@ -45,47 +45,26 @@ public class JavaApplication2 {
         // Используем контейнер Мар (что позволяет избежать дублей) 
         // где в качестве ключа используется возвращаемое значение функции класса toString(),
         // а значение - объект Person
-        Map<String, Person> hashMap = new HashMap<>();
+        Map<String, Person> PersonActorDirector = new HashMap<>();
+        //Стоговый список людей
+        List<Person> people = new ArrayList();
         
         resultActor.forEach((actor) -> 
         {
             Person actorPerson = actor.getPerson();
-            // Если человек отсутствует - он добавляется в контейнер
-            if (hashMap.get(actorPerson.toString())==null)
-                hashMap.put(actorPerson.toString(), actorPerson);
+            PersonActorDirector.put(actorPerson.toString(), actorPerson);
         });
         
         resultDirector.forEach((director) -> 
         {
             Person directorPerson = director.getPerson();
-            // Если человек отсутствует - он добавляется в контейнер
-            if (hashMap.get(directorPerson.toString())==null)
-                hashMap.put(directorPerson.toString(), directorPerson);
-        });
-        
-        // Выведем в консоль получившийся набор
-        for (Map.Entry<String, Person> me : set) 
-        {
-            System.out.println(me.getValue());
-        }
-       // List<Person> people = new ArrayList(); // Список для людей являющихся одновременно режиссером и актером
-        
-        // Вложенным циклом сравниваем суперклассы каждого актера и режиссера  
-        /*resultActor.forEach((actor) -> 
-        {
-            Person actorPerson = actor.getPerson();
-            resultDirector.forEach((director) -> 
+            // Если человек присутствует в Map - значит он и режиссер и актер, добавляем в итоговый список
+            if (PersonActorDirector.get(directorPerson.toString())!=null)
             {
-                Person directorPerson = director.getPerson();
-                // Если суперклассы равны, то добавляем человека в целевой список и выводим в консоль
-                if (actorPerson.equals(directorPerson)) 
-                {
-                    people.add(actorPerson);
-                    System.out.println(directorPerson.toString());
-                }
-            });
-        });*/
-       
+                people.add(directorPerson);
+                System.out.println(directorPerson.toString());
+            }
+        });        
     }
    
     // Функция выводит в консоль список актеров, которые снимались в фильмах цифрового формата 
