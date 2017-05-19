@@ -42,11 +42,31 @@ public class JavaApplication2 {
         List<Actor> resultActor = queryActor.execute();
         List<Director> resultDirector = queryDirector.execute();
         
+        // Используем контейнер Мар (что позволяет избежать дублей) 
+        // где в качестве ключа используется возвращаемое значение функции класса toString(),
+        // а значение - объект Person
+        Map<String, Person> hashMap = new HashMap<>();
         
-        List<Person> people = new ArrayList(); // Список для людей являющихся одновременно режиссером и актером
+        resultActor.forEach((actor) -> 
+        {
+            Person actorPerson = actor.getPerson();
+            // Если человек отсутствует - он добавляется в контейнер
+            if (hashMap.get(actorPerson.toString())==null)
+                hashMap.put(actorPerson.toString(), actorPerson);
+        });
+        
+        resultDirector.forEach((director) -> 
+        {
+            Person directorPerson = director.getPerson();
+            // Если человек отсутствует - он добавляется в контейнер
+            if (hashMap.get(directorPerson.toString())==null)
+                hashMap.put(directorPerson.toString(), directorPerson);
+        });
+        
+       // List<Person> people = new ArrayList(); // Список для людей являющихся одновременно режиссером и актером
         
         // Вложенным циклом сравниваем суперклассы каждого актера и режиссера  
-        resultActor.forEach((actor) -> 
+        /*resultActor.forEach((actor) -> 
         {
             Person actorPerson = actor.getPerson();
             resultDirector.forEach((director) -> 
@@ -59,7 +79,7 @@ public class JavaApplication2 {
                     System.out.println(directorPerson.toString());
                 }
             });
-        });
+        });*/
        
     }
    
